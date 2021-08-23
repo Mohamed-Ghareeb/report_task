@@ -18,16 +18,13 @@ class AgentResource extends JsonResource
     {
         $officialHealthyLeaves = app(GeneralSettings::class)->healthy_leaves;
         $officialYearlyLeaves = app(GeneralSettings::class)->yearly_leaves;
-        $sumOfficialLeaves = app(GeneralSettings::class)->healthy_leaves + app(GeneralSettings::class)->yearly_leaves;
 
-        $countOfHealthyLeaves = $this->agent_leaves->where('is_leave', 1)->where('type', 'healthy')->count();
-        $countOfYearlyLeaves = $this->agent_leaves->where('is_leave', 1)->where('type', 'yearly')->count();
-        $countOfLeaves = $this->agent_leaves->where('is_leave', 1)->count();
+        $countOfHealthyLeaves = $this->agent_leaves->where('type', 'healthy')->count();
+        $countOfYearlyLeaves = $this->agent_leaves->where('type', 'yearly')->count();
 
         $countOfHealthyLeaves = $countOfHealthyLeaves > $officialHealthyLeaves ? $countOfHealthyLeaves - $officialHealthyLeaves : 0;
         $countOfYearlyLeaves = $countOfYearlyLeaves > $officialYearlyLeaves ? $countOfYearlyLeaves - $officialYearlyLeaves : 0;
-        $countOfLeaves = $countOfLeaves > $sumOfficialLeaves ? $countOfLeaves - $sumOfficialLeaves : 0;
-
+        $countOfLeaves = $countOfHealthyLeaves + $countOfYearlyLeaves;
 
         return [
             'id' => $this->id,

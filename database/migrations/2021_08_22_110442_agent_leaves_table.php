@@ -16,10 +16,8 @@ class AgentLeavesTable extends Migration
         Schema::create('agent_leaves', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('agent_id');
-            $table->boolean('is_leave')->default(0);
             $table->enum('type', ['healthy', 'yearly'])->nullable();
             $table->date('date');
-
             $table->foreign('agent_id')->references('id')->on('agents')->cascadeOnDelete();
         });
     }
